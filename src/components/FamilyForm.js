@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { submitFamilyForm } from '../actions';
 import { Segment } from 'semantic-ui-react';
+import { renderError, renderInput } from '../helpers/formHelpers';
 
 class FamilyForm extends React.Component{
   state={
@@ -10,31 +11,10 @@ class FamilyForm extends React.Component{
       show_family_form: false
     }
   }
-  renderError = ({error,touched}) => {
-    if(touched && error){
-      return(
-        <div className="ui error message">
-          <div className="header">{error}</div>
-        </div>
-      );
-    }
-    return null;
-  }
 
-  renderInput = ({input, label, meta}) => { //destructuring formProps
-    const isError = `field ${meta.error && meta.touched ? 'error' : ''}` ;
-    return(
-      <div className={isError}>
-        <label htmlFor="">{label}</label>
-        <input {...input} autoComplete="off" />
-        <div>{meta.error}</div>
-        {this.renderError(meta)}
-      </div>
-    );
-  }
+
 
   onSubmit = formValues => this.props.submitFamilyForm(formValues);
-
 
   render() {
     const label_familyName = "Nom de la famille"
@@ -42,8 +22,6 @@ class FamilyForm extends React.Component{
     const label_adultsNumber = "#Adultes"
     const label_kidsNumber = "#Kids"
 
-    // const visibility = (this.state.account.show_family_form === true) ? "" : "ui form error hidden hide-me"
-    console.log(this.props.load);
     return(
       <Segment disabled={!this.props.show_family_form}>
         <form className="ui form error" onSubmit={this.props.handleSubmit(this.onSubmit)}>
@@ -51,21 +29,21 @@ class FamilyForm extends React.Component{
           <div className="ui container grid">
             <div className="ui row">
               <div className="eight wide column">
-                <Field name="familyName" component={this.renderInput} label={label_familyName}/>
+                <Field name="familyName" component={renderInput} label={label_familyName}/>
               </div>
               <div className="eight wide column">
-                <Field name="familyMoneySpent" component={this.renderInput} label={label_moneySpent}/>
+                <Field name="familyMoneySpent" component={renderInput} label={label_moneySpent}/>
               </div>
               <div className="eight wide column">
-                <Field name="adultsNumber" component={this.renderInput} label={label_adultsNumber}/>
+                <Field name="adultsNumber" component={renderInput} label={label_adultsNumber}/>
               </div>
               <div className="eight wide column">
-                <Field name="kidsNumber" component={this.renderInput} label={label_kidsNumber}/>
+                <Field name="kidsNumber" component={renderInput} label={label_kidsNumber}/>
               </div>
             </div>
             <div className="ui row">
               <div className="sixteen wide column centered">
-                <button className="ui button primary">OK</button>
+                <button className="ui button primary" disabled={!this.props.show_family_form}>OK</button>
               </div>
             </div>
           </div>
@@ -81,24 +59,30 @@ FamilyForm.defaultProps = {
   adultsNumber: 3,
   kidsNumber: 2
 }
-// const validate = ({remainingMoney}) => { // destructuring formValues
-//   const errors = {};
-//   if(!remainingMoney){
-//     errors.title = 'Vous devez entrer un montant en euros'
-//   }
-//   return errors;
-// };
+
+const validate = ({familyMoneySpent, adultsNumber, kidsNumber}) => { // destructuring formValues
+  const errors = {};
+  if(!familyMoneySpent || isNaN(familyMoneySpent)){
+    errors.familyMoneySpent = 'Vous devez entrer un montant en euros'
+  }
+  if( isNaN(adultsNumber)){
+    errors.adultsNumber = 'Vous devez entrer un nombre'
+  }
+  if( isNaN(kidsNumber)){
+    errors.kidsNumber = 'Vous devez entrer un nombre'
+  }
+  return errors;
+};
+
 const mapStateToProps = (state, ownProps) => {
 	return {
     show_family_form: state.account.show_family_form
   };
 };
 
-
-
 const formWrapped = reduxForm({
-  form: 'AddFamilyForm'
-  // , validate
+  form: 'AddFamilyForm',
+  validate
 }) (FamilyForm);
 
 export default connect(mapStateToProps,{submitFamilyForm}) (formWrapped);

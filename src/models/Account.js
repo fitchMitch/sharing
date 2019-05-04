@@ -8,35 +8,32 @@ class Account {
     this._operations = [];
   }
 
-  get remainingMoney () { return this._remainingMoney}
-  get families () { return this._families}
-  get moneySpent () { return this._moneySpent}
-  get operations () { return this._operations}
+  get remainingMoney () { return parseInt(this._remainingMoney)}
+  get families () { return parseInt(this._families)}
+  get moneySpent () { return parseInt(this._moneySpent)}
+  get operations () { return parseInt(this._operations)}
 
-  reset() {
-    this._operations = [];
-    this._moneySpent = -this.remainingMoney;
-    for (let family in this._families) {
-      this._moneySpent += family._familyMoneySpent;
-    }
-    return;
-  }
+  // reset() {
+  //   this._operations = [];
+  //   this._moneySpent = -this.remainingMoney;
+  //   for (let family in this._families) {
+  //     this._moneySpent += family.familyMoneySpent;
+  //   }
+  //   return;
+  // }
 
   addFamily(family) {
     this._families.push(family);
-    this._moneySpent += family._familyMoneySpent;
+    this._moneySpent += family.familyMoneySpent;
     return;
   }
 
   countingPeople() {
-    let count = 0;
-    this.families.each( family => {
-      count += family.nrOfPeople();
-    });
-    return count;
+    const reducer = (acc,family) => acc + family.nrOfPeople()
+    return this._families.reduce(reducer,0)
   }
 
-  averageMoneyPerPerson() {
+  averageMoneySpentPerPerson() {
     if (this.countingPeople() === 0) {
       return this.moneySpent;
     }
@@ -44,30 +41,45 @@ class Account {
     return this.moneySpent / this.countingPeople();
   }
 
-  familyDebt(family) {
-    return this.averageMoneyPerPerson() * family.nrOfPeople() - family.familyMoneySpent
+  setFamiliesDebt(){
+    for (let family of this._families) {
+      family.setFamilyDebt(this.computeFamilyDebt(family))
+    }
+    return true;
+  }
+
+  computeFamilyDebt(family) {
+    return this.averageMoneySpentPerPerson() * family.nrOfPeople() - family.familyMoneySpent
   }
 
   giveMoney({money, creditFamily, debitFamily}) {
-    debitFamily.familyAccount.moveMoney(money);
-    creditFamily.familyAccount.moveMoney(-money);
-    this.operations.push({money,creditFamily,debitFamily});
-    return;
+    debitFamily.spendMoney(money);
+    creditFamily.spendMoney(-money);
+    return true;
   }
 
-  familiesReorganize() {
-    this._families = _.sortBy(this.families, family => family.familyDebt())
-    return;
+  writeOperation({money, creditFamily, debitFamily}) {
+    if (money > 0){
+      this._operations.push({ money, creditFamily, debitFamily});
+    } else {
+      console.log('error when writing')
+    }
+    return true;
+  }
+
+  familiesDebtReorganize() {
+    this._families = _.sortBy(this._families, family => family.getFamilyDebt())
+    return true;
   }
 
   operationsMaterial() {
     let material = [];
-    for (let operation in this.operations) {
+    for (let operation of this._operations) {
       material.push({
-        debitfamily: operation.debitfamily.familyName,
+        debitFamily: operation.debitFamily._familyName,
         word: 'gives',
         money: operation.money,
-        creditfamily: operation.creditfamily.familyName
+        creditFamily: operation.creditFamily._familyName
       });
     }
     return material;
@@ -76,17 +88,47 @@ class Account {
     return (this._families.map(family => family.showFamily()));
   }
 
+  check(){
+    const reducer = (acc,family) => acc +  this.computeFamilyDebt(family)
+    return this._families.reduce(reducer,0)
+  }
+
+  getGeneralDetails(){
+    return {
+      totalCost: this._moneySpent,
+      averageCostPerPerson: this.averageMoneySpentPerPerson()
+    }
+  }
+  resetBook(){
+    this._operations = []
+    return true;
+  }
+
   resolve() {
-    for(let i =0 ; i < this.familiesReorganize().length -1;i++){
-      if (this.families[i].familyDebt() > 0.01){
-        this.giveMoney({
-          money: this.family[i].getDebt(),
-          creditFamily: this.family[i],
-          debitFamily: this.family[i+1]})
+    this.resetBook() && this.setFamiliesDebt() && this.familiesDebtReorganize();
+    if (Math.abs(this.check()) > 0.01){
+      console.log("wrong computation")
+      return {};
+    }
+    let familiesNr = this._families.length;
+    while(this._families[0].getFamilyDebt() < -0.01 ){
+      let amount = Math.min(
+        - this._families[0].getFamilyDebt(),
+        this._families[familiesNr-1].getFamilyDebt()
+      );
+      let operation = {
+        money: amount,
+        creditFamily: this._families[familiesNr-1],
+        debitFamily: this._families[0]
       }
-      // maybe this.familiesReorganize()
-    };
-    return this.operationsMaterial();
+      this.giveMoney(operation) && this.writeOperation(operation);
+      this.familiesDebtReorganize();
+    }
+
+    return {
+      operations: this.operationsMaterial(),
+      generalDetails: this.getGeneralDetails()
+    }
   }
 }
 

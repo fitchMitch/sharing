@@ -1,22 +1,28 @@
 import {
   SET_REMAINING_MONEY,
   SHOW_FAMILY_FORM,
-  SUBMIT_FAMILY_FORM
+  SUBMIT_FAMILY_FORM,
+  LIST_FAMILIES,
+  SHOW_RESOLVE_BUTTON,
+  RESOLVE_ACTION
 } from './types';
 import Account from '../models/Account';
 import Family from '../models/Family';
 
-export let account;
+export let account = new Account(0);
 export const setRemainingMoney = formValues => {
   const remainingMoney = formValues.remainingMoney;
-  account = new Account(remainingMoney);
+
+  account.addFamily(new Family({
+    familyName: "Cagnotte", familyMoneySpent: -remainingMoney
+  }));
   return( {
     type: SET_REMAINING_MONEY,
-    payload: remainingMoney
+    payload: account.showFamilies()
   });
 };
 
-export const show_family_form = () => {
+export const showFamilyForm = () => {
   return( {
     type: SHOW_FAMILY_FORM
   });
@@ -24,12 +30,32 @@ export const show_family_form = () => {
 
 export const submitFamilyForm = formValues => {
   account.addFamily(new Family(formValues));
-  console.log(account.showFamilies());
   return( {
     type: SUBMIT_FAMILY_FORM,
     payload: account.showFamilies()
   });
 };
+
+export const listFamilies = () => {
+  return({
+    type: LIST_FAMILIES
+  })
+}
+
+export const showResolveButton = () => {
+  return({
+    type: SHOW_RESOLVE_BUTTON
+  })
+}
+
+export const resolveAction = () => {
+  return({
+    type: RESOLVE_ACTION,
+    payload: account.resolve()
+  })
+}
+
+
 // export const createStream = formValues => async  (dispatch, getState ) => {
 //   const {userId} = getState().auth;
 //   const response = await streams.post('/streams',{...formValues, userId});

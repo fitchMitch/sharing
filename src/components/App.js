@@ -27,14 +27,14 @@ const App = () =>{
       </Header>
       <Grid centered columns={2} stackable>
         <Grid.Column>
-            <RemainingForm/>
-            <ResolveButton/>
-            <MessageResolution/>
+          <RemainingForm/>
+          <ResolveButton/>
+          <MessageResolution/>
         </Grid.Column>
         <Grid.Column>
-            <AddFamilyButton/>
-            <FamilyForm/>
-            <FamilyList/>
+          <FamilyList/>
+          <AddFamilyButton/>
+          <FamilyForm/>
         </Grid.Column>
       </Grid>
     </Container>

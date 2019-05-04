@@ -1,4 +1,5 @@
 import React from 'react';
+
 export const renderError = ({error,touched}) => {
   if(touched && error){
     return(
@@ -11,15 +12,14 @@ export const renderError = ({error,touched}) => {
 }
 
 export const renderInput = ({input, label, meta}) => { //destructuring formProps
-  console.log("meta");
-  console.log(meta);
   const isError = `field ${meta.error && meta.touched ? 'error' : ''}` ;
   return(
     <div className={isError}>
       <label htmlFor="">{label}</label>
       <input {...input} autoComplete="off" />
-      <div>{meta.error}</div>
-      {this.renderError(meta)}
+      {renderError(meta)}
     </div>
   );
 }
+
+export const moneyFormat = amount => Math.floor(100 * amount) / 100

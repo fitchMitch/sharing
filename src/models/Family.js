@@ -2,27 +2,27 @@
 class Family {
   constructor({
     familyName,
-    kidsNumber,
-    adultsNumber,
-    familyMoneySpent
+    kidsNumber = 0,
+    adultsNumber = 0,
+    familyMoneySpent= 0
   }) {
     this._familyName = familyName;
     this._kidsNumber = kidsNumber;
     this._adultsNumber = adultsNumber;
     this._familyMoneySpent = familyMoneySpent;
-    this._familyAccount = 0;
+    this._familyDebt = 0;
   }
   get familyName() { return this._familyName}
-  get kidsNumber() { return this._kidsNumber}
-  get adultsNumber() { return this._adultsNumber}
-  get familyMoneySpent() { return this._familyMoneySpent}
-  get familyAccount() { return this._familyAccount}
+  get kidsNumber() { return parseInt(this._kidsNumber)}
+  get adultsNumber() { return parseInt(this._adultsNumber)}
+  get familyMoneySpent() { return parseInt(this._familyMoneySpent)}
+  getFamilyDebt = () => parseInt(this._familyDebt * 100) / 100
 
-  nrOfPeople() { return this._adultsNumber + this._kidsNumber / 2}
+  setFamilyDebt(amount) { this._familyDebt = amount }
 
-  moveMoney(money) {
-    this._familyAccount += money;
-  }
+  spendMoney(money) { this._familyDebt += money; }
+
+  nrOfPeople() { return this.adultsNumber + this.kidsNumber / 2}
 
   showFamily(){
     return ({
