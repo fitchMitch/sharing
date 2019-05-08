@@ -8,19 +8,10 @@ class Account {
     this._operations = [];
   }
 
-  get remainingMoney () { return parseInt(this._remainingMoney)}
+  get remainingMoney () { return parseFloat(this._remainingMoney)}
   get families () { return parseInt(this._families)}
-  get moneySpent () { return parseInt(this._moneySpent)}
+  get moneySpent () { return parseFloat(this._moneySpent)}
   get operations () { return parseInt(this._operations)}
-
-  // reset() {
-  //   this._operations = [];
-  //   this._moneySpent = -this.remainingMoney;
-  //   for (let family in this._families) {
-  //     this._moneySpent += family.familyMoneySpent;
-  //   }
-  //   return;
-  // }
 
   addFamily(family) {
     this._families.push(family);
@@ -28,17 +19,19 @@ class Account {
     return;
   }
 
-  countingPeople() {
-    const reducer = (acc,family) => acc + family.nrOfPeople()
-    return this._families.reduce(reducer,0)
-  }
+  // countingPeople() {
+  //   const reducer = (acc,family) => acc + family.nrOfPeople()
+  //   return this._families.reduce(reducer,0)
+  // }
 
-  averageMoneySpentPerPerson() {
-    if (this.countingPeople() === 0) {
+  averageCostPerPerson() {
+    const reducer = (acc,family) => acc + family.nrOfPeople()
+    const peopleNr =  this._families.reduce(reducer,0)
+    if (this.peopleNr === 0) {
       return this.moneySpent;
     }
 
-    return this.moneySpent / this.countingPeople();
+    return this.moneySpent / peopleNr;
   }
 
   setFamiliesDebt(){
@@ -49,7 +42,7 @@ class Account {
   }
 
   computeFamilyDebt(family) {
-    return this.averageMoneySpentPerPerson() * family.nrOfPeople() - family.familyMoneySpent
+    return this.averageCostPerPerson() * family.nrOfPeople() - family.familyMoneySpent
   }
 
   giveMoney({money, creditFamily, debitFamily}) {
@@ -85,10 +78,19 @@ class Account {
     return material;
   }
   showFamilies(){
-    return (this._families.map(family => family.showFamily()));
+    this._families.map(family => family.showFamily())
+  }
+  stateFamilies(){
+    return (this._families.map(family => {
+      return {[family.familyName]: family.showFamily()}
+    }));
   }
 
-  check(){
+  familiesFromState(state){
+    Object.values(state)
+  }
+
+  checkTotalDebtAmount(){
     const reducer = (acc,family) => acc +  this.computeFamilyDebt(family)
     return this._families.reduce(reducer,0)
   }
@@ -96,9 +98,29 @@ class Account {
   getGeneralDetails(){
     return {
       totalCost: this._moneySpent,
-      averageCostPerPerson: this.averageMoneySpentPerPerson()
+      averageCostPerPerson: this.averageCostPerPerson()
     }
   }
+  findFamilyByName(name){
+    return _.find(this._families,{familyName: name});
+  }
+
+  findFamilyDetails(name){
+    let family =  this.findFamilyByName(name);
+    return({
+      familyName : family.familyName,
+      adultsNumber : family.adultsNumber,
+      kidsNumber : family.kidsNumber,
+      familyMoneySpent : family.familyMoneySpent
+    })
+  }
+
+  deleteFamily(name){
+    let familyTarget = this.findFamilyByName(name)
+    this._moneySpent -= familyTarget.familyMoneySpent;
+    this._families = _.reject(this._families,{_familyName: name})
+  }
+
   resetBook(){
     this._operations = []
     return true;
@@ -106,11 +128,13 @@ class Account {
 
   resolve() {
     this.resetBook() && this.setFamiliesDebt() && this.familiesDebtReorganize();
-    if (Math.abs(this.check()) > 0.01){
+    if (Math.abs(this.checkTotalDebtAmount()) > 0.01){
       console.log("wrong computation")
-      return {};
+      console.log(this);
+      return false;
     }
     let familiesNr = this._families.length;
+    // -------------------
     while(this._families[0].getFamilyDebt() < -0.01 ){
       let amount = Math.min(
         - this._families[0].getFamilyDebt(),
@@ -124,6 +148,7 @@ class Account {
       this.giveMoney(operation) && this.writeOperation(operation);
       this.familiesDebtReorganize();
     }
+    // -------------------
 
     return {
       operations: this.operationsMaterial(),

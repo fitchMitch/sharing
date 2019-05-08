@@ -14,17 +14,19 @@ class MessageResolution extends React.Component{
   renderMessage(message){
     return(
       <div key={`${message.creditFamily}-${message.debitFamily}`}>
-        <List>
-          <List.Item>
-            <Image avatar src='https://react.semantic-ui.com/images/avatar/small/rachel.png' />
-            <List.Content>
-              <List.Header as='a'>{message.creditFamily}</List.Header>
-              <List.Description>
-                doit {message.money} euros à {message.debitFamily}
-              </List.Description>
-            </List.Content>
-          </List.Item>
-        </List>
+        <Segment>
+          <List>
+            <List.Item>
+              <Image avatar src='https://react.semantic-ui.com/images/avatar/small/rachel.png' />
+              <List.Content>
+                <List.Header as='a'>{message.creditFamily}</List.Header>
+                <List.Description>
+                  doit {moneyFormat(message.money)} euros à {message.debitFamily}
+                </List.Description>
+              </List.Content>
+            </List.Item>
+          </List>
+        </Segment>
       </div>
     );
   }
@@ -40,14 +42,14 @@ class MessageResolution extends React.Component{
 
     return(
       <div>
-        <Header as='h2' icon textAlign='center'>
+        <Header as='h2' icon textAlign='center' color='olive'>
           <Icon name='users' circular />
           <Header.Content>Résultats</Header.Content>
         </Header>
 
-        <Segment>
+        <Segment inverted color="olive">
           <p>
-            Coût total : {generalDetails.totalCost} euros
+            Coût total : {moneyFormat(generalDetails.totalCost)} euros
           </p>
           <p>
             Coût moyen par personne : {moneyFormat(generalDetails.averageCostPerPerson)} euros

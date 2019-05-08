@@ -12,9 +12,16 @@ class RemainingForm extends React.Component {
 
   render() {
     const label = "Après la fête, il reste (en euros) : "
-    return(
-      <Segment disabled={!this.props.show_remaining_button}>
-        <form className="ui form error" onSubmit={this.props.handleSubmit(this.onSubmit)}>
+    const notShown = null;
+
+    const shown =
+      <Segment
+        disabled={!this.props.show_remaining_button}
+        color="blue"
+      >
+        <form className="ui form error"
+              onSubmit={this.props.handleSubmit(this.onSubmit)}
+        >
           <div className="ui container grid">
             <div className="ui row">
               <div className="fourteen wide column">
@@ -25,7 +32,7 @@ class RemainingForm extends React.Component {
           </div>
         </form>
       </Segment>
-    );
+    return (this.props.show_remaining_button) ? shown : notShown;
   }
 }
 RemainingForm.defaultProps = {
@@ -34,7 +41,7 @@ RemainingForm.defaultProps = {
 
 const validate = (values) => { // destructuring formValues
   const errors = {};
-  if(!values.remainingMoney || isNaN(values.remainingMoney) ){
+  if(values.remainingMoney === "" || isNaN(values.remainingMoney) ){
     errors.remainingMoney = 'Saisissez un montant en euros, pour les virgules, utilisez le caractère : "."'
   }
   return errors;
@@ -48,6 +55,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const formWrapped = reduxForm({
   form: 'RemainingForm',
+  enableReinitialize : true,
   validate
 })(RemainingForm);
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { showFamilyForm } from '../actions';
+import { showCreateFamilyForm } from '../actions';
 import { Segment } from 'semantic-ui-react';
 
 class AddFamilyButton extends React.Component{
@@ -8,7 +8,7 @@ class AddFamilyButton extends React.Component{
 
   onClick = e => {
     e.preventDefault();
-    this.props.showFamilyForm();
+    this.props.showCreateFamilyForm();
   }
 
   render() {
@@ -28,4 +28,4 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 
-export default connect(mapStateToProps,{showFamilyForm}) (AddFamilyButton);
+export default connect(mapStateToProps,{showCreateFamilyForm}) (AddFamilyButton);
