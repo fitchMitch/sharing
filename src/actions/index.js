@@ -53,9 +53,7 @@ export const showUpdateFamilyForm = () => {
 };
 
 const repaintResolve = ({dispatch_function,type, payload,resolved_status}) => {
-  console.log(`resolved_status there : ${resolved_status}`);
   if(resolved_status === true){
-    console.log('been there too');
     dispatch_function({ type, payload });
     dispatch_function({
       type: RESOLVE_ACTION,
