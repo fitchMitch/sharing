@@ -7,16 +7,16 @@ class Family {
     familyMoneySpent= 0
   }) {
     this._familyName = familyName;
-    this._kidsNumber = kidsNumber;
-    this._adultsNumber = adultsNumber;
-    this._familyMoneySpent = familyMoneySpent;
+    this._kidsNumber = parseInt(kidsNumber);
+    this._adultsNumber = parseInt(adultsNumber);
+    this._familyMoneySpent = parseFloat(familyMoneySpent);
     this._familyDebt = 0;
   }
   get familyName() { return this._familyName}
   get kidsNumber() { return parseInt(this._kidsNumber)}
   get adultsNumber() { return parseInt(this._adultsNumber)}
-  get familyMoneySpent() { return parseInt(this._familyMoneySpent)}
-  getFamilyDebt = () => parseInt(this._familyDebt * 100) / 100
+  get familyMoneySpent() { return parseFloat(this._familyMoneySpent)}
+  getFamilyDebt = () => parseFloat(this._familyDebt * 100) / 100
 
   setFamilyDebt(amount) { this._familyDebt = amount }
 

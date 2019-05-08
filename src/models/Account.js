@@ -8,9 +8,9 @@ class Account {
     this._operations = [];
   }
 
-  get remainingMoney () { return parseInt(this._remainingMoney)}
+  get remainingMoney () { return parseFloat(this._remainingMoney)}
   get families () { return parseInt(this._families)}
-  get moneySpent () { return parseInt(this._moneySpent)}
+  get moneySpent () { return parseFloat(this._moneySpent)}
   get operations () { return parseInt(this._operations)}
 
   addFamily(family) {
@@ -24,7 +24,7 @@ class Account {
   //   return this._families.reduce(reducer,0)
   // }
 
-  averageMoneySpentPerPerson() {
+  averageCostPerPerson() {
     const reducer = (acc,family) => acc + family.nrOfPeople()
     const peopleNr =  this._families.reduce(reducer,0)
     if (this.peopleNr === 0) {
@@ -42,7 +42,7 @@ class Account {
   }
 
   computeFamilyDebt(family) {
-    return this.averageMoneySpentPerPerson() * family.nrOfPeople() - family.familyMoneySpent
+    return this.averageCostPerPerson() * family.nrOfPeople() - family.familyMoneySpent
   }
 
   giveMoney({money, creditFamily, debitFamily}) {
@@ -98,7 +98,7 @@ class Account {
   getGeneralDetails(){
     return {
       totalCost: this._moneySpent,
-      averageCostPerPerson: this.averageMoneySpentPerPerson()
+      averageCostPerPerson: this.averageCostPerPerson()
     }
   }
   findFamilyByName(name){

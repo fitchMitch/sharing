@@ -22,6 +22,7 @@ export default (state = {families:{}}, action) => {
           show_create_family_form: false,
           show_remaining_button: true,
           have_edit_family_form_hidden: true,
+          resolution_shown: false,
           families:state.families
         }
       } else {
@@ -31,6 +32,7 @@ export default (state = {families:{}}, action) => {
           show_create_family_form: false,
           show_remaining_button: false,
           have_edit_family_form_hidden: true,
+          resolution_shown: false,
           families: {...state.families,[action.payload.familyName]:action.payload}
         }
       }
@@ -41,7 +43,7 @@ export default (state = {families:{}}, action) => {
         show_add_family_button: false
       };
     case SUBMIT_FAMILY_FORM:
-      if(Object.values(state.families).length > 1){
+      if(Object.values(state.families).length > 0){
         return ({
           ...state,
           families: {...state.families,[action.payload.familyName]:action.payload},
@@ -75,36 +77,56 @@ export default (state = {families:{}}, action) => {
         have_edit_family_form_hidden: false,
       })
     case UPDATE_FAMILY:
-      console.log(" UPDATE_FAMILY action.payload");
-      console.log(action.payload);
+
       return ({
         ...state,
-        families: {...state.families,[action.payload.familyName]:action.payload},
+        families: {...state.families, [action.payload.familyName]:action.payload},
         have_create_family_form_hidden: false,
         have_edit_family_form_hidden: true,
-        show_create_family_form: false
+        show_create_family_form: false,
+        show_add_family_button: true
       })
     case RESOLVE_ACTION:
       return({
         ...state,
-        resolve_action: action.payload
-        // TODO , selectedFamily: null
+        resolve_action: action.payload,
+        resolution_shown: true
       })
     case DELETE_FAMILY:
       if(Object.values(state.families).length > 1){
-      return ({
-        ...state,
-        families: _.omit(state.families,action.payload),
-        show_add_family_button: true,
-        show_resolve_button: true
-        })
+        if (action.payload === "Cagnotte"){
+          return ({
+            ...state,
+            families: _.omit(state.families, action.payload),
+            show_add_family_button: true,
+            show_resolve_button: true,
+            show_remaining_button: true
+          })
+        } else {
+          return ({
+            ...state,
+            families: _.omit(state.families, action.payload),
+            show_add_family_button: true,
+            show_resolve_button: true,
+          })
+        }
       } else {
-        return ({
-          ...state,
-          families: _.omit(state.families,action.payload),
-          show_add_family_button: true,
-          show_resolve_button: false
-        })
+        if (action.payload === "Cagnotte"){
+          return ({
+            ...state,
+            families: _.omit(state.families, action.payload),
+            show_add_family_button: true,
+            show_resolve_button: false,
+            show_remaining_button: true
+          })
+        } else {
+          return ({
+            ...state,
+            families: _.omit(state.families, action.payload),
+            show_add_family_button: true,
+            show_resolve_button: false
+          })
+        }
       }
     case LIST_FAMILIES:
     case SHOW_RESOLVE_BUTTON:

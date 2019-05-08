@@ -23,7 +23,9 @@ class CreateFamilyForm extends React.Component{
         <h3 className="ui dividing header">Nouvelle famille</h3>
         <FamilyForm
           onSubmit={this.onSubmit}
+          name_disabled="false"
           formId="createFamilyForm"
+          names={this.props.names}
           form_disabled={!this.props.show_create_family_form}
         />
       </Segment>
@@ -34,8 +36,10 @@ class CreateFamilyForm extends React.Component{
 const mapStateToProps = (state, ownProps) => {
 	return {
     form: ownProps.formId,
+    names: Object.keys(state.account.families),
     show_create_family_form: state.account.show_create_family_form,
-    have_create_family_form_hidden: state.account.have_create_family_form_hidden
+    have_create_family_form_hidden: state.account.have_create_family_form_hidden,
+    name_disabled: false
   };
 };
 

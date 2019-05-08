@@ -15,7 +15,7 @@ import Family from '../models/Family';
 import _ from 'lodash';
 
 export let account = new Account(0);
-export const setRemainingMoney = formValues => {
+export const setRemainingMoney = formValues => (dispatch, getState) => {
   const remainingMoney = formValues.remainingMoney;
   let spared_money = null;
 
@@ -24,14 +24,18 @@ export const setRemainingMoney = formValues => {
       familyName: "Cagnotte", familyMoneySpent: -remainingMoney
     })
     account.addFamily(spared_money);
-    return ({
+    repaintResolve({
+      dispatch_function: dispatch,
       type: SET_REMAINING_MONEY,
-      payload: account.findFamilyDetails('Cagnotte')
+      payload: account.findFamilyDetails('Cagnotte'),
+      resolved_status: (getState().account.resolution_shown === true)
     });
   } else {
-    return({
-      type:SET_REMAINING_MONEY,
-      payload:null
+    repaintResolve({
+      dispatch_function: dispatch,
+      type: SET_REMAINING_MONEY,
+      payload: null,
+      resolved_status: (getState().account.resolution_shown === true)
     });
   }
 };
@@ -48,12 +52,28 @@ export const showUpdateFamilyForm = () => {
   });
 };
 
-export const submitFamilyForm = formValues => {
+const repaintResolve = ({dispatch_function,type, payload,resolved_status}) => {
+  console.log(`resolved_status there : ${resolved_status}`);
+  if(resolved_status === true){
+    console.log('been there too');
+    dispatch_function({ type, payload });
+    dispatch_function({
+      type: RESOLVE_ACTION,
+      payload: account.resolve()
+    });
+  } else {
+    dispatch_function({ type, payload });
+  }
+}
+
+export const submitFamilyForm = formValues => (dispatch, getState) => {
   let new_family = new Family(formValues)
-  account.addFamily(new_family);
-  return( {
+  account.addFamily( new_family );
+  repaintResolve({
+    dispatch_function: dispatch,
     type: SUBMIT_FAMILY_FORM,
-    payload: new_family.showFamily()
+    payload: new_family.showFamily(),
+    resolved_status: (getState().account.resolution_shown === true)
   });
 };
 
@@ -83,23 +103,26 @@ export const editFamilyForm = familyName => {
   });
 }
 
-export const updateFamily = formValues => {
+export const updateFamily = formValues => (dispatch, getState) => {
   let abr_values =_.pick(formValues,'familyName','kidsNumber','adultsNumber','familyMoneySpent')
-  console.log(abr_values);
   account.deleteFamily(abr_values.familyName);
   account.addFamily(new Family(abr_values));
-  return({
+  repaintResolve({
+    dispatch_function: dispatch,
     type: UPDATE_FAMILY,
-    payload: abr_values
-  })
+    payload: abr_values,
+    resolved_status: (getState().account.resolution_shown === true)
+  });
 }
 
-export const deleteFamily = (familyName) => {
-  account.deleteFamily(familyName)
-  return({
+export const deleteFamily = familyName => (dispatch, getState) => {
+  account.deleteFamily(familyName);
+  repaintResolve({
+    dispatch_function: dispatch,
     type: DELETE_FAMILY,
-    payload: familyName
-  })
+    payload: familyName,
+    resolved_status: (getState().account.resolution_shown === true)
+  });
 }
 
 // export const createStream = formValues => async  (dispatch, getState ) => {

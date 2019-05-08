@@ -16,7 +16,11 @@ class ResolveButton extends React.Component{
   render() {
     return(
       <Segment disabled={!this.props.show_resolve_button} textAlign="center">
-        <button className="ui button purple" onClick={ e => this.onClick(e)} disabled={!this.props.show_resolve_button}>
+        <button
+          className="ui button purple"
+          onClick={ e => this.onClick(e)}
+          disabled={!this.props.show_resolve_button}
+        >
           PARTAGER !
         </button>
       </Segment>

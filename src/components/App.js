@@ -20,12 +20,12 @@ const App = () =>{
         Allez on partage !
       </Header>
       <Grid centered columns={2} stackable>
-        <Grid.Column>
+        <Grid.Column width={6}>
           <RemainingForm initialValues = {initialRemainingMoney}/>
           <ResolveButton/>
           <MessageResolution/>
         </Grid.Column>
-        <Grid.Column>
+        <Grid.Column width={10}>
           <FamilyList/>
           <AddFamilyButton/>
           <CreateFamilyForm/>

@@ -11,12 +11,12 @@ export const renderError = ({error,touched}) => {
   return null;
 }
 
-export const renderInput = ({input, label, meta}) => { //destructuring formProps
+export const renderInput = ({input, label, meta, disabled}) => { //destructuring formProps
   const isError = `field ${meta.error && meta.touched ? 'error' : ''}` ;
   return(
     <div className={isError}>
       <label htmlFor="">{label}</label>
-      <input {...input} autoComplete="off" />
+      <input {...input} autoComplete="off" disabled={disabled}/>
       {renderError(meta)}
     </div>
   );

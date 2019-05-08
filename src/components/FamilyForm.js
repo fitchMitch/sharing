@@ -15,7 +15,7 @@ class FamilyForm extends React.Component{
     const label_moneySpent = "Dépense occasionnée"
     const label_adultsNumber = "#Adultes"
     const label_kidsNumber = "#Kids"
-
+    const disabled = !this.props.name_disabled
     return(
       <form className="ui form error"
             onSubmit={this.props.handleSubmit(this.onSubmit)}
@@ -25,9 +25,9 @@ class FamilyForm extends React.Component{
             <div className="eight wide column">
               <Field
                 name="familyName"
-                disabled={false}
                 component={renderInput}
                 label={label_familyName}
+                disabled={disabled}
               />
             </div>
             <div className="eight wide column">
@@ -68,9 +68,14 @@ class FamilyForm extends React.Component{
     );
   }
 }
+FamilyForm.defaultProps = {
+  kidsNumber:0,
+  adultsNumber:1
+}
 
-const validate = ({familyMoneySpent, adultsNumber, kidsNumber}) => { // destructuring formValues
+const validate = ({familyName, familyMoneySpent, adultsNumber, kidsNumber}) => { // destructuring formValues
   const errors = {};
+  if(familyName)
   if(familyMoneySpent==="" || isNaN(familyMoneySpent)){
     errors.familyMoneySpent = 'Vous devez entrer un montant en euros'
   }
@@ -84,7 +89,11 @@ const validate = ({familyMoneySpent, adultsNumber, kidsNumber}) => { // destruct
 };
 
 const mapStateToProps = (state, parentProps) => {
-	return {form: parentProps.formId};
+	return {
+    form: parentProps.formId,
+    names: parentProps.names,
+    name_disabled:parentProps.name_disabled
+  };
 };
 
 const formWrapper = reduxForm({

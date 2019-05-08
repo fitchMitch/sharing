@@ -21,7 +21,7 @@ class MessageResolution extends React.Component{
               <List.Content>
                 <List.Header as='a'>{message.creditFamily}</List.Header>
                 <List.Description>
-                  doit {message.money} euros à {message.debitFamily}
+                  doit {moneyFormat(message.money)} euros à {message.debitFamily}
                 </List.Description>
               </List.Content>
             </List.Item>
@@ -47,9 +47,9 @@ class MessageResolution extends React.Component{
           <Header.Content>Résultats</Header.Content>
         </Header>
 
-        <Segment color="olive">
+        <Segment inverted color="olive">
           <p>
-            Coût total : {generalDetails.totalCost} euros
+            Coût total : {moneyFormat(generalDetails.totalCost)} euros
           </p>
           <p>
             Coût moyen par personne : {moneyFormat(generalDetails.averageCostPerPerson)} euros

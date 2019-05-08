@@ -25,6 +25,7 @@ class EditFamilyForm extends React.Component{
         <FamilyForm
           initialValues = {_.pick(this.props.initialValues,'kidsNumber', 'adultsNumber','familyName','familyMoneySpent')}
           formId="editFamilyForm"
+          name_disabled="true"
           onSubmit = {this.onSubmit}
         />
       </Segment>
@@ -39,8 +40,10 @@ EditFamilyForm.defaultProps = {
 const mapStateToProps = (state, ownProps) => {
 	return {
     initialValues: state.account.selectedFamily,
+    names: state.account.families.keys,
     show_edit_family_form: state.account.show_edit_family_form,
-    have_edit_family_form_hidden: state.account.have_edit_family_form_hidden
+    have_edit_family_form_hidden: state.account.have_edit_family_form_hidden,
+    name_disabled: true
   };
 };
 

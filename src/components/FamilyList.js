@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { listFamilies, editFamilyForm, deleteFamily } from '../actions';
-import { Segment, List, Image, Header,Icon } from 'semantic-ui-react';
+import { Segment, List, Image, Header,Icon, Grid } from 'semantic-ui-react';
 
 class FamilyList extends React.Component{
   state = {
@@ -26,7 +26,6 @@ class FamilyList extends React.Component{
     return `${this.familyDescription(family)} ${verb} ${Math.abs(family.familyMoneySpent)} euros`;
   }
 
-  // console.log(name);
   onFamilyClick = (name) => (e) => {
     this.props.editFamilyForm(name);
   }
@@ -36,7 +35,7 @@ class FamilyList extends React.Component{
   }
 
   trashIcon(family,nr){
-    if(nr>1){
+    if(nr > 1){
       return <Icon name="trash" color='red' onClick={this.onTrashClick(family.familyName)}/>
     } else {
       return null
@@ -46,22 +45,32 @@ class FamilyList extends React.Component{
   renderFamily(family,count){
     return (
       <div key={`${family.familyName}-${family.adultsNumber}-${family.kidsNumber}-${family.familyMoneySpent}`}>
-        <List>
-          <List.Item>
-            <Image avatar src='https://react.semantic-ui.com/images/avatar/small/rachel.png' />
-            <List.Content>
-              <List.Header as='a'>
-                <div onClick={this.onFamilyClick(family.familyName)}>
-                  {family.familyName}
-                </div>
-              </List.Header>
-              <List.Description>
-                 {this.wordingForHasBrought(family)}
-                 {this.trashIcon(family,count)}
-              </List.Description>
-            </List.Content>
-          </List.Item>
-        </List>
+
+        <Grid celled='internally'>
+          <Grid.Row>
+            <Grid.Column width={14}>
+            <List>
+              <List.Item>
+              <Image avatar src='https://react.semantic-ui.com/images/avatar/small/rachel.png' />
+              <List.Content>
+                <List.Header as='a'>
+                  <div onClick={this.onFamilyClick(family.familyName)}>
+                    {family.familyName}
+                  </div>
+                </List.Header>
+                <List.Description>
+                  {this.wordingForHasBrought(family)}
+                </List.Description>
+              </List.Content>
+              </List.Item>
+            </List>
+            </Grid.Column>
+            <Grid.Column width={2}>
+              {this.trashIcon(family,count)}
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+
       </div>
     );
   }
