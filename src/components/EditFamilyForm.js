@@ -6,12 +6,9 @@ import { Segment } from 'semantic-ui-react';
 import _ from 'lodash';
 
 class EditFamilyForm extends React.Component{
-  state = {
-      // show_edit_family_form: false,
-      // have_edit_family_form_hidden: true
-  }
+  state = { }
 
-  onSubmit = formValues => this.props.updateFamily(formValues);
+  onSubmit = formValues => this.props.updateFamily(formValues)
 
   render() {
     if (this.props.have_edit_family_form_hidden === true) {
@@ -32,18 +29,25 @@ class EditFamilyForm extends React.Component{
     );
   }
 }
+
 EditFamilyForm.defaultProps = {
   show_edit_family_form: false,
   have_edit_family_form_hidden: true
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = state => {
+  const {
+    selectedFamily,
+    families,
+    show_edit_family_form,
+    have_edit_family_form_hidden
+  } = state.account
 	return {
-    initialValues: state.account.selectedFamily,
-    names: state.account.families.keys,
-    show_edit_family_form: state.account.show_edit_family_form,
-    have_edit_family_form_hidden: state.account.have_edit_family_form_hidden,
-    name_disabled: true
+    initialValues: selectedFamily,
+    names: families.keys,
+    name_disabled: true,
+    show_edit_family_form,
+    have_edit_family_form_hidden
   };
 };
 

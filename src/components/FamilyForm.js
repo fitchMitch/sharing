@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
-import { renderError, renderInput } from '../helpers/formHelpers';
+import { renderInput } from '../helpers/formHelpers';
 
 class FamilyForm extends React.Component{
 

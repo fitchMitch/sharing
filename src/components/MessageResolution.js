@@ -4,15 +4,15 @@ import { resolveAction } from '../actions';
 import { Segment, List, Image, Header, Icon } from 'semantic-ui-react';
 import { moneyFormat } from '../helpers/formHelpers';
 
-class MessageResolution extends React.Component{
+class MessageResolution extends React.Component {
   state = {
     account: {
       resolve_action: {}
     }
   }
 
-  renderMessage(message){
-    return(
+  renderMessage(message) {
+    return (
       <div key={`${message.creditFamily}-${message.debitFamily}`}>
         <Segment>
           <List>
@@ -31,17 +31,9 @@ class MessageResolution extends React.Component{
     );
   }
 
-  render() {
-    if (!this.props.message) {
-      return(
-        <div>
-        </div>
-      );
-    }
-    const {operations, generalDetails } = this.props.message
-
-    return(
-      <div>
+  renderResolution({ operations, generalDetails }){
+    return (
+      <>
         <Header as='h2' icon textAlign='center' color='olive'>
           <Icon name='users' circular />
           <Header.Content>Résultats</Header.Content>
@@ -58,15 +50,23 @@ class MessageResolution extends React.Component{
             {operations.map(operationDetail => this.renderMessage(operationDetail))}
           </div>
         </Segment>
-      </div>
+      </>
     );
+  }
+
+  render() {
+    if (!this.props.message) {
+      return (<div> </div>);
+    }
+
+    return this.renderResolution(this.props.message);
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   return {
     message: state.account.resolve_action
   };
 };
 
-export default connect(mapStateToProps,{resolveAction}) (MessageResolution);
+export default connect(mapStateToProps, { resolveAction })(MessageResolution);

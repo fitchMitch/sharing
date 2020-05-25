@@ -36,30 +36,33 @@ export default (state = {families:{}}, action) => {
           families: {...state.families,[action.payload.familyName]:action.payload}
         }
       }
+
     case SHOW_CREATE_FAMILY_FORM:
       return {
         ...state,
         show_create_family_form: true,
-        show_add_family_button: false
+        show_add_family_button: false,
       };
+
     case SUBMIT_FAMILY_FORM:
+      const newState = {
+        ...state,
+        families: {...state.families,[action.payload.familyName]:action.payload},
+        show_create_family_form: false,
+        show_add_family_button: true
+      }
       if(Object.values(state.families).length > 0){
         return ({
-          ...state,
-          families: {...state.families,[action.payload.familyName]:action.payload},
-          show_create_family_form: false,
-          show_add_family_button: true,
+          ...newState,
           show_resolve_button: true
         });
       } else {
         return ({
-          ...state,
-          families: {...state.families,[action.payload.familyName]:action.payload},
-          show_create_family_form: false,
-          show_add_family_button: true,
+          ...newState,
           show_resolve_button: false
         });
       }
+
     case EDIT_FAMILY_FORM:
       return({
         ...state,
@@ -70,14 +73,15 @@ export default (state = {families:{}}, action) => {
         show_add_family_button: false,
         selectedFamily: action.payload
       })
+
     case SHOW_UPDATE_FAMILY_FORM:
       return ({
         ...state,
         have_create_family_form_hidden: true,
         have_edit_family_form_hidden: false,
       })
-    case UPDATE_FAMILY:
 
+    case UPDATE_FAMILY:
       return ({
         ...state,
         families: {...state.families, [action.payload.familyName]:action.payload},
@@ -86,48 +90,49 @@ export default (state = {families:{}}, action) => {
         show_create_family_form: false,
         show_add_family_button: true
       })
+
     case RESOLVE_ACTION:
       return({
         ...state,
         resolve_action: action.payload,
         resolution_shown: true
       })
+
     case DELETE_FAMILY:
+      const delState = {
+        ...state,
+        families: _.omit(state.families, action.payload),
+        show_add_family_button: true,
+        have_edit_family_form_hidden: true,
+      }
       if(Object.values(state.families).length > 1){
         if (action.payload === "Cagnotte"){
           return ({
-            ...state,
-            families: _.omit(state.families, action.payload),
-            show_add_family_button: true,
+            ...delState,
             show_resolve_button: true,
-            show_remaining_button: true
+            show_remaining_button: true,
           })
         } else {
           return ({
-            ...state,
-            families: _.omit(state.families, action.payload),
-            show_add_family_button: true,
+            ...delState,
             show_resolve_button: true,
           })
         }
       } else {
         if (action.payload === "Cagnotte"){
           return ({
-            ...state,
-            families: _.omit(state.families, action.payload),
-            show_add_family_button: true,
+            ...delState,
             show_resolve_button: false,
-            show_remaining_button: true
+            show_remaining_button: true,
           })
         } else {
           return ({
-            ...state,
-            families: _.omit(state.families, action.payload),
-            show_add_family_button: true,
-            show_resolve_button: false
+            ...delState,
+            show_resolve_button: false,
           })
         }
       }
+
     case LIST_FAMILIES:
     case SHOW_RESOLVE_BUTTON:
       return state;

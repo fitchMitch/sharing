@@ -4,21 +4,19 @@ import { connect } from 'react-redux';
 import { submitFamilyForm } from '../actions';
 import { Segment } from 'semantic-ui-react';
 
-class CreateFamilyForm extends React.Component{
+class CreateFamilyForm extends React.Component {
   state={
     account:{
       show_create_family_form: false
     }
   }
 
-  onSubmit = formValues => this.props.submitFamilyForm(formValues);
+  onSubmit = formValues => {
+    this.props.submitFamilyForm(formValues);
+  }
 
-  render() {
-    if (this.props.have_create_family_form_hidden === true) {
-      return null
-    }
-
-    return(
+  renderFamilyForm = () => {
+    return (
       <Segment color="green" disabled={!this.props.show_create_family_form}>
         <h3 className="ui dividing header">Nouvelle famille</h3>
         <FamilyForm
@@ -30,6 +28,13 @@ class CreateFamilyForm extends React.Component{
         />
       </Segment>
     );
+  }
+
+  render() {
+    if (this.props.have_create_family_form_hidden === true) {
+      return null
+}
+    return this.renderFamilyForm()
   }
 }
 
@@ -43,4 +48,4 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default connect(mapStateToProps,{submitFamilyForm}) (CreateFamilyForm);
+export default connect(mapStateToProps, { submitFamilyForm })(CreateFamilyForm);
