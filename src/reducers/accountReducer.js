@@ -95,7 +95,8 @@ export default (state = {families:{}}, action) => {
       return({
         ...state,
         resolve_action: action.payload,
-        resolution_shown: true
+        resolution_shown: true,
+        show_resolve_button: false,
       })
 
     case DELETE_FAMILY:
