@@ -35,11 +35,9 @@ export const setRemainingMoney = formValues => (dispatch, getState) => {
 };
 
 const repaintResolve = ({dispatch_function,type, payload,resolved_status}) => {
+  dispatch_function({ type, payload });
   if(resolved_status === true){
-    dispatch_function({ type, payload });
     dispatch_function(resolveAction());
-  } else {
-    dispatch_function({ type, payload });
   }
 }
 

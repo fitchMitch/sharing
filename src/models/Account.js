@@ -21,8 +21,11 @@ class Account {
 
   deleteFamily(name){
     const familyTarget = this.findFamilyByName(name)
-    this._moneySpent -= familyTarget.familyMoneySpent;
-    this._families = _.reject(this._families,{_familyName: name})
+    if (familyTarget){
+      this._moneySpent -= familyTarget.familyMoneySpent;
+      this._families = _.reject(this._families,{_familyName: name})
+    } else { console.log('Error : could not find family ');
+    }
   }
 
   averageCostPerPerson() {

@@ -21,7 +21,7 @@ class CreateFamilyForm extends React.Component {
         <h3 className="ui dividing header">Nouvelle famille</h3>
         <FamilyForm
           onSubmit={this.onSubmit}
-          name_disabled="false"
+          name_edit_disabled="false"
           formId="createFamilyForm"
           names={this.props.names}
           form_disabled={!this.props.show_create_family_form}

@@ -15,7 +15,8 @@ class FamilyForm extends React.Component{
     const label_moneySpent = "Dépense occasionnée"
     const label_adultsNumber = "#Adultes"
     const label_kidsNumber = "#Kids"
-    const disabled = !this.props.name_disabled
+    const disabled = (this.props.name_edit_disabled === 'true')
+    
     return(
       <form className="ui form error"
             onSubmit={this.props.handleSubmit(this.onSubmit)}

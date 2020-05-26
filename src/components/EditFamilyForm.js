@@ -22,7 +22,7 @@ class EditFamilyForm extends React.Component{
         <FamilyForm
           initialValues = {_.pick(this.props.initialValues,'kidsNumber', 'adultsNumber','familyName','familyMoneySpent')}
           formId="editFamilyForm"
-          name_disabled="true"
+          name_edit_disabled="true"
           onSubmit = {this.onSubmit}
         />
       </Segment>
