@@ -51,7 +51,7 @@ class FamilyList extends React.Component{
             <Grid.Column width={14}>
             <List>
               <List.Item>
-              <Image avatar src='https://react.semantic-ui.com/images/avatar/small/rachel.png' />
+              <Image avatar src={`https://semantic-ui.com/images/avatar/small/${family.avatar}.jpg`} />
               <List.Content>
                 <List.Header as='a'>
                   <div onClick={this.onFamilyClick(family.familyName)}>

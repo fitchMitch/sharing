@@ -122,7 +122,8 @@ const isResolved = (state) => (state.account.resolution_shown === true)
 const addRemainingCash = (remainingMoney, account) => {
   const spared_money = new Family({
     familyName: "Cagnotte",
-    familyMoneySpent: -remainingMoney
+    familyMoneySpent: -remainingMoney,
+    avatar: 'matt'
   });
   account.addFamily(spared_money);
 }

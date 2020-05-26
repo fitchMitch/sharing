@@ -118,7 +118,8 @@ class Account {
       familyName : family.familyName,
       adultsNumber : family.adultsNumber,
       kidsNumber : family.kidsNumber,
-      familyMoneySpent : family.familyMoneySpent
+      familyMoneySpent : family.familyMoneySpent,
+      avatar: family.avatar
     })
   }
 
