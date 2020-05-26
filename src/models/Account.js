@@ -76,7 +76,8 @@ class Account {
         debitFamily: operation.debitFamily._familyName,
         word: 'gives',
         money: operation.money,
-        creditFamily: operation.creditFamily._familyName
+        creditFamily: operation.creditFamily._familyName,
+        creditFamilyAvatar:operation.creditFamily._avatar,
       });
     }
     return material;

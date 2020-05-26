@@ -17,7 +17,9 @@ class MessageResolution extends React.Component {
         <Segment>
           <List>
             <List.Item>
-              <Image avatar src='https://react.semantic-ui.com/images/avatar/small/rachel.png' />
+              <Image avatar
+                src={`https://react.semantic-ui.com/images/avatar/small/${message.creditFamilyAvatar}.jpg`}
+              />
               <List.Content>
                 <List.Header as='a'>{message.creditFamily}</List.Header>
                 <List.Description>
